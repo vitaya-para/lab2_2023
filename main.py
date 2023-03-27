@@ -13,6 +13,7 @@ plot_data = {"gamma": [], "cond": [], "error": []}
 
 # начинает цикл, в котором gamma перебирает значения из списка gamma_values
 for gamma in gamma_values:
+    print("Gamma "+ str(gamma))
     # устанавливает значения переменных x и y в соответствии с текущим значением gamma
     x = 4 + gamma
     y = 4 - gamma
@@ -42,25 +43,41 @@ for gamma in gamma_values:
     # создает массив g, содержащий точные значения решения.
     g = numpy.array(g)
     # использует для вычисления относительной погрешности решения
-    error = numpy.linalg.norm(w - g) / numpy.linalg.norm(g)
+    error = numpy.linalg.norm(w - g, ord=None) / numpy.linalg.norm(g, ord=None)
+    #выведем промежуточные значения
+    print("z:")
+    print(z)
+
+    print("g:")
+    print(g)
+
+    print("w:")
+    print(w)
+
     # добавляет данные о текущем значении gamma в соответствующие списки
     plot_data["gamma"].append(gamma)
     plot_data["cond"].append(cond)
     plot_data["error"].append(error)
 
 # Построение таблицы
+print('Result table:')
 results = pd.DataFrame({
     'Gamma': plot_data["gamma"],
     'cond(Q)': plot_data["cond"],
-    'Error': plot_data["error"]
+    'Error': plot_data["error"],
 })
 
 print(results.to_string(index=False))
 
 # Построение графика
 plt.plot(plot_data["gamma"], plot_data["cond"], label="cond(Q)")
+plt.xlabel("Gamma")
+plt.legend()
+plt.savefig("img1.jpg")
+plt.show()
+
 plt.plot(plot_data["gamma"], plot_data["error"], label="Error")
 plt.xlabel("Gamma")
 plt.legend()
-plt.savefig("img.jpg")
+plt.savefig("img2.jpg")
 plt.show()
